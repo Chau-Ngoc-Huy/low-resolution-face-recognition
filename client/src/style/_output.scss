@@ -1,0 +1,25 @@
+.output-component {
+    display: flex;
+    flex-direction: column;
+    gap: 36px 0;
+
+    .output-img {
+        margin-top: 12px;
+    }
+}
+
+.down-button {
+    border: 1px solid black;
+    display: inline-flex;
+    gap: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+
+    button {
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+}
