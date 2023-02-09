@@ -1,4 +1,4 @@
-from asyncio.constants import ACCEPT_RETRY_DELAY
+# from asyncio.constants import ACCEPT_RETRY_DELAY
 from unittest import result
 from flask import Flask, send_file, jsonify, request
 from app.identification import identification
@@ -20,11 +20,11 @@ def index():
 
 @app.route('/api/verification/<model_id>', methods=['POST'])
 def verified(model_id):
-
+    print('-------------------')
     model = models[int(model_id)]
     if request.is_json:
         req, acc, time = verification(request.get_json()['image1'], request.get_json()['image2'], model)
-
+        
         res = jsonify({
             'req': req,
             'acc': acc,

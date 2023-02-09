@@ -4,4 +4,4 @@ from app import app
 # get_data.get_oxbuild_data()
 # get_data.get_paris_data()
 
-app.run('0.0.0.0', 8080)
+app.run('0.0.0.0', 8080, debug=True)
