@@ -1,19 +1,10 @@
-import sys
-sys.path.insert(0, './app/EIPnet')
-
 import torch
-from facenet_pytorch import InceptionResnetV1
-import torchvision.transforms as T
-
 import tensorflow as tf
-from networks import generator
-from options.test_options import TestOptions
 
 import base64
 from PIL import Image 
-import cv2
 import io 
-import os 
+import datetime 
 
 import numpy as np
 from sklearn.preprocessing import normalize
@@ -31,62 +22,24 @@ def subtract_mean(x):
     return x
 
 @torch.no_grad()
-def verification(img1, img2, model_type):
+def verification(img1, img2, model, trans, model_name):
     req = {
         "image1": img1,
         "image2": img2,
-        "model": model_type
+        "model": model_name
     }
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    time_start = datetime.datetime.now()
 
     img1 = base64.b64decode(img1.split(',')[1])
     img1 = Image.open(io.BytesIO(img1)).convert('RGB')    
     img2 = base64.b64decode(img2.split(',')[1])
     img2 = Image.open(io.BytesIO(img2)).convert('RGB')
 
-    if model_type == 'TCN':
-        model = torch.load('./app/pretrained/TCN_InceptionV1.pt')
-        model.to(device)
-        model.eval()
-
-        trans = T.Compose([
-                    T.Resize(224),
-                    T.ToTensor(),
-                    T.Lambda(lambda x: subtract_mean(x))
-                ])
-
-    elif model_type == 'EIPNet':
-        opt = TestOptions().parse()
-        checkpoint_path = opt.weight_path
-        X_lr = tf.placeholder(tf.float32, shape=[2, 112, 112, opt.output_nc])
-        X_hr = tf.placeholder(tf.float32, shape=[1, 112, 112, opt.output_nc])
-
-        training = False
-
-        config = tf.ConfigProto()
-        # config.gpu_options.allow_growth = True
-        # config.gpu_options.visible_device_list = opt.gpu_ids
-
-        RGB, Step1_edge, Step2_edge, Step3_edge = generator(X_lr)
-
-        sess = tf.Session(config=config)
-        sess.run(tf.global_variables_initializer())
-        saver = tf.train.Saver(max_to_keep=None)
-        save_file = os.path.join(checkpoint_path, 'G_weight.ckpt')
-        saver.restore(sess, save_file)
-        
-        model =  InceptionResnetV1(pretrained='vggface2')
-        model.to(device)
-        model.eval()
-
-        trans = T.Compose([
-                    T.Resize(160),
-                    np.float32,          #Value not normalized when toTensor
-                    T.ToTensor(),
-                    fixed_image_standardization
-                ])
-   
+    if model_name == 'EIPNet':
+       
+        X_lr, RGB, Step1_edge, Step2_edge, Step3_edge, sess, model_extract = model
         img1 = img1.resize((112, 112))
         img2 = img2.resize((112, 112))
         img_lr = np.stack((img1, img2), axis=0)
@@ -100,11 +53,10 @@ def verification(img1, img2, model_type):
     imgs = torch.stack((img1, img2), 0)
     print(imgs.shape)
 
-    if model_type == 'TCN':
+    if model_name == 'TCN':
         out_net, _ = model(imgs.to(device))
-        print('-------')
     else:
-        out_net = model(imgs.to(device))
+        out_net = model_extract(imgs.to(device))
 
     embeddings = out_net.detach().cpu().numpy()
     embeddings = normalize(embeddings)
@@ -117,4 +69,6 @@ def verification(img1, img2, model_type):
     else:
         pair = 0 
     
-    return req, pair, 1
+    time_inference = datetime.datetime.now() - time_start
+    
+    return req, str(dist), 1

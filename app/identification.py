@@ -1,6 +1,14 @@
+import torch
+import tensorflow as tf
+
 import base64
-import cv2
+from PIL import Image 
+import io 
+import datetime
+
 import numpy as np
+from sklearn.preprocessing import normalize
+from sklearn.metrics import pairwise_distances
 
 listImage = [
     {
@@ -37,12 +45,58 @@ listImage = [
     },
 ]
 
-def identification(img_url, model, number):
+def find(img_request, gallery_info, top):
+
+    features_gallery = []
+    labels_gallery = []
+    path_gallery = []
+    for feature in gallery_info:
+        features_gallery.append(feature[0])
+        labels_gallery.append(feature[1])
+        path_gallery.append(feature[2])
+
+    features_gallery = np.array(features_gallery)
+    dis = pairwise_distances(img_request, features_gallery, metric='cosine')
+    
+    ind_max = np.argsort(dis, axis=1)[0, :int(top)]
+    list_path_top = []
+    for ind in ind_max:
+        list_path_top.append(path_gallery[ind])
+    
+    return list_path_top
+
+def identification(img_url, model, trans, model_name, top):
+    
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
     #return list of image
     result = listImage
-    time = 0.1
+    time_start = datetime.datetime.now()
+
     img_bytes = base64.b64decode(img_url.split(',')[1])
-    img_file = open('./image.jpeg', 'wb')
-    img_file.write(img_bytes)
-    print(img_bytes)
-    return result, time
+    img = Image.open(io.BytesIO(img_bytes)).convert('RGB')
+
+    if model_name == 'EIPNet':
+        X_lr, RGB, Step1_edge, Step2_edge, Step3_edge, sess, model_extract = model
+        img_lr = img.resize((112, 112))
+        img_lr = np.expand_dims(img_lr, axis=0)
+        img_sr, _, _, _ = sess.run([RGB, Step1_edge, Step2_edge, Step3_edge], feed_dict={X_lr: img_lr})
+        print(img_sr.shape) # Value of img now is float
+        img = Image.fromarray(img_sr[0].astype(np.uint8)) 
+
+    img = trans(img)
+    img = torch.unsqueeze(img, 0)
+    if model_name == 'TCN':
+        print(img.shape)
+        out_net, _ = model(img.to(device))
+        gallery_info = np.load('./app/features/features_gallery_TCN.npy', allow_pickle=True)
+    else:
+        out_net = model_extract(img.to(device))
+        gallery_info = np.load('./app/features/features_gallery_sr_EIPNet.npy', allow_pickle=True)
+
+    out_net = out_net.cpu().detach().numpy()
+    list_path_top = find(out_net, gallery_info, top)
+    
+    time_inference = datetime.datetime.now() - time_start
+
+    return result, list_path_top
