@@ -17,7 +17,7 @@ features/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
+*.pyc
 
 # misc
 .DS_Store
