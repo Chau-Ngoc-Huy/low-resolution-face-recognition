@@ -16,9 +16,9 @@ requests==2.27.1
 scipy==1.7.3
 six==1.16.0
 soupsieve==2.3.1
-torch==1.4.0+cpu
+# torch==1.4.0+cpu
 torchfile==0.1.0
-torchvision==0.5.0+cpu
+# torchvision==0.5.0+cpu
 tensorboard==1.14.0
 tensorflow==1.14.0
 tensorflow-estimator==1.14.0
