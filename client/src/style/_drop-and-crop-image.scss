@@ -36,16 +36,32 @@
     gap: 12px;
 }
 
+.show-img {
+    display: table;
+}
+
 .crop-controls {
+    width: 500px;
+    padding: 0 8px;
+
+    // float: left;
     margin-top: 20px;
 }
-// .double-dropzone {
-//     display: inline-block;
-// //   vertical-align: middle;
-// }
-// // .uploadimg {
-// //     margin: auto;
-// // }
+.double-dropzone {
+    display: table;
+}
+.uploadimg {
+    float:none;
+}
+.double-upload-image {
+    float: left;
+}
+
+.single-upload-image {
+    .crop-controls{
+        width: 1000px;
+    }
+}
 .dropzone-container {
     flex: 1;
     padding: 20px;
@@ -117,7 +133,7 @@
 }
 
 .webcam {
-    max-width: 100%;
+    // max-width: 100%;
     flex: 1;
     padding: 20px;
     border-width: 2px;
@@ -141,8 +157,16 @@
     }
 }
 
+.setting {
+    display: table;
+}
+
 .ReactModal__Content.ReactModal__Content--after-open {
     position: relative;
+}
+
+.upload {
+    float: left;
 }
 
 .close-button {
@@ -160,15 +184,17 @@
 }
 
 .modal-container {
-    display: flex;
+    float: left;
+    // display: flex;
+    width: 200px;
     gap: 30px;
-    margin: 24px 0;
+    margin: 0 8px;
+}
 
-    .draw-mask {
-        margin-top: 30px;
-        max-width: 400px;
-        max-height: 400px;
-    }
+.draw-mask {
+    width: 200px;
+    padding: 0 8px;
+    float: left;
 }
 
 .slider-container {

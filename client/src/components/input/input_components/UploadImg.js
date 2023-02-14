@@ -28,7 +28,7 @@ function centerAspectCrop() {
       mediaHeight,
     )
   }
-function UploadImg({setImg, labelName}) {
+function UploadImg({setImg, labelName, type='upload-image'}) {
     const [imgSrc, setImgSrc] = useState('')
     const [files, setFiles] = useState([]);
     const [fileName, setFileName] = useState("")
@@ -42,7 +42,7 @@ function UploadImg({setImg, labelName}) {
     const imgRef = useRef(null);
     const previewCanvasRef = useRef(null)
     const aspect = 1 / 1
-	const size = 224
+	const size = 200
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -119,106 +119,112 @@ function UploadImg({setImg, labelName}) {
       }, []);
 
     return (
-        <>
+        <div className={type}>
             <div className="crop-controls">
-            {!!imgSrc &&
-            <>
-                <div className='modal-container'>
-					{
-					<ReactCrop
-						crop={crop}
-						onChange={(_, percentCrop) => setCrop(percentCrop)}
-						onComplete={(c) => setCompletedCrop(c)}
-						aspect={aspect}
-					>
-						<img
-							ref={imgRef}
-							alt="Crop me"
-							src={imgSrc}
-							style={{ 
-								transform: `scale(${scale}) rotate(${rotate}deg)`,
-								minWidth: '400px',
-								maxHeight: '600px',
-								
-							}}
-							onLoad={onImageLoad}
-						/>
-					</ReactCrop>}
-                </div>
-                <div>
-                	<label className='edit-label label'>edit</label>
-					<div className='modal'>
-						<div className='settings-image'>
-							<div className='zoom-container'>
-								<span className='icon' onClick={() => setScale((current) => current - 0.1)}><i className="fa-sharp fa-solid fa-magnifying-glass-minus"></i></span>
-								<Slider
-									aria-label="Default"
-									valueLabelDisplay="auto"
-									min={0}
-									max={200}
-									value={typeof scale === 'number' ? Math.round(scale * 100) : 0}
-									onChange={(e, newValue) => setScale(newValue / 100)}
-								/>
-								<span className='icon' onClick={() => setScale((current) => current + 0.1)}><i className="fa-sharp fa-solid fa-magnifying-glass-plus"></i></span>
-							</div>
-							<div className='rotate-container'>
-								<div className='rotate-btn' onClick={() => setRotate(current => current - 90)}>
-									<button>Rotale left</button>
-									<span><i className="fa-sharp fa-solid fa-rotate-left"></i></span>
-								</div>
-								<div className='rotate-btn' onClick={() => setRotate(current => current + 90)}>
-									<span><i className="fa-sharp fa-solid fa-rotate-right"></i></span>
-									<button>Rotale right</button>
-								</div>
-							</div>
-                    	</div>
-                	</div>
-                </div>
-            </>}
-            <label className='label-dropzone label'>{labelName}</label>
-            <div className='drop-file'>
-				<div className='dropzone-container'>
-					<div {...getRootProps()} className="dropzone">
-						<input {...getInputProps()} />
-						<span><i className="fa-sharp fa-solid fa-upload"></i></span>
-						<p>Drop a file or click to select</p>
-						<p>{ }</p>
+				<label className='label-dropzone label'>{labelName}</label>
+				<div className='drop-file'>
+					<div className='dropzone-container'>
+						<div {...getRootProps()} className="dropzone">
+							<input {...getInputProps()} />
+							<span><i className="fa-sharp fa-solid fa-upload"></i></span>
+							<p>Drop a file or click to select</p>
+							<p>{ }</p>
+						</div>
+						{!!fileName && <div className='filename-container'>
+							<p>{fileName}</p>
+							<i className="fa-solid fa-trash" onClick={handleRemoveFile}></i>
+						</div>}
 					</div>
-					{!!fileName && <div className='filename-container'>
-						<p>{fileName}</p>
-						<i className="fa-solid fa-trash" onClick={handleRemoveFile}></i>
-					</div>}
-            	</div>
-            </div>
-            
+				</div>
         	</div>
-            {!!completedCrop && (
-			<div className='draw-mask'>
-			<label className='label-mask label'>Preview</label>
-			<div style={{ position: "relative" }}>
-				<canvas
-				id='canvas'
-				ref={previewCanvasRef}
-				style={{
-					border: '1px solid black',
-					objectFit: 'contain',
-					width: size,
-					height: size,
-					position: 'relative'
-				}}
-				></canvas>
-				<canvas
-				// onMouseDown={startDrawing}
-				// onMouseUp={finishDrawing}
-				// onMouseMove={draw}
-				ref={drawCanvasRef}
-				style={{ position: "absolute", top: "0" }}
-				></canvas>
+
+			<div className='show-img'>
+				{!!imgSrc && <>
+					<div className='modal-container'>
+					<label className='label-mask label'>Origin</label>
+						{
+						<ReactCrop
+							crop={crop}
+							onChange={(_, percentCrop) => setCrop(percentCrop)}
+							onComplete={(c) => setCompletedCrop(c)}
+							aspect={aspect}
+						>
+							
+							<img
+								ref={imgRef}
+								alt="Crop me"
+								src={imgSrc}
+								style={{ 
+									transform: `scale(${scale}) rotate(${rotate}deg)`,
+									minWidth: '200px',
+									// maxHeight: '600px',
+									
+								}}
+								onLoad={onImageLoad}
+							/>
+						</ReactCrop>}
+					</div>
+				</>}
+
+				{!!completedCrop && (
+					<div className='draw-mask'>
+						<label className='label-mask label'>Preview</label>
+						<div style={{ position: "relative" }}>
+							<canvas
+								id='canvas'
+								ref={previewCanvasRef}
+								style={{
+									border: '1px solid black',
+									objectFit: 'contain',
+									width: size,
+									height: size,
+									// position: 'relative'
+								}}
+							></canvas>
+							<canvas
+								// onMouseDown={startDrawing}
+								// onMouseUp={finishDrawing}
+								// onMouseMove={draw}
+								ref={drawCanvasRef}
+								style={{ position: "absolute", top: "0" }}
+							></canvas>
+						</div>
+					</div>
+				)}
+				{!!imgSrc && <div>
+						<label className='edit-label label'>edit</label>
+						<div className='modal'>
+							<div className='settings-image'>
+								<div className='zoom-container'>
+									<span className='icon' onClick={() => setScale((current) => current - 0.1)}><i className="fa-sharp fa-solid fa-magnifying-glass-minus"></i></span>
+									<Slider
+										aria-label="Default"
+										valueLabelDisplay="auto"
+										min={0}
+										max={200}
+										value={typeof scale === 'number' ? Math.round(scale * 100) : 0}
+										onChange={(e, newValue) => setScale(newValue / 100)}
+									/>
+									<span className='icon' onClick={() => setScale((current) => current + 0.1)}><i className="fa-sharp fa-solid fa-magnifying-glass-plus"></i></span>
+								</div>
+								<div className='rotate-container'>
+									<div className='rotate-btn' onClick={() => setRotate(current => current - 90)}>
+										<button>Rotale left</button>
+										<span><i className="fa-sharp fa-solid fa-rotate-left"></i></span>
+									</div>
+									<div className='rotate-btn' onClick={() => setRotate(current => current + 90)}>
+										<span><i className="fa-sharp fa-solid fa-rotate-right"></i></span>
+										<button>Rotale right</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> }
 			</div>
-			</div>
-		)}
+			
+            
 			{/* <Resize setSize={(value) => { setSize(value) }}></Resize> */}
-        </>
+        </div>
     )
 }
 
