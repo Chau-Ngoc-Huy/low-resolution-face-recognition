@@ -137,10 +137,8 @@ function UploadImg({setImg, labelName}) {
 							src={imgSrc}
 							style={{ 
 								transform: `scale(${scale}) rotate(${rotate}deg)`,
-								minHeight: '400px',
 								minWidth: '400px',
 								maxHeight: '600px',
-								maxWidth: '600px'
 								
 							}}
 							onLoad={onImageLoad}

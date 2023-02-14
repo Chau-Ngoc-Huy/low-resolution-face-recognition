@@ -1,5 +1,5 @@
 import React from 'react'
-import {useEffect, useCallback, useState} from 'react'
+import {useCallback, useState} from 'react'
 import Input from '../components/input/Input';
 // import Input2 from '../components/input/Input2'
 import Output from '../components/output/Output';
@@ -14,10 +14,10 @@ const FaceVeri = "FaceVeri"
 
 const [typeTest, setTypeTest] = useState(FaceID)
 const [time, setTime] = useState(0)
-const [acc, setAcc] = useState(0)
+const [dis, setDis] = useState(0)
 const [listImage, setListImage] = useState([])
-const [veriResult, setVeriResult] = useState({})
-const [idResult, setIdResult] = useState([])
+// const [veriResult, setVeriResult] = useState({})
+// const [idResult, setIdResult] = useState([])
 
 const verifiedImage = (data) => {
 	const requestOptions = {
@@ -25,6 +25,7 @@ const verifiedImage = (data) => {
 		method: 'POST',
 		headers: { 
 			'Content-Type': 'application/json',
+			"Access-Control-Allow-Origin": "*",
 		},
 		body: JSON.stringify(data)
 	};
@@ -34,11 +35,13 @@ const verifiedImage = (data) => {
 	const url = `http://127.0.0.1:8080/api/verification/${model}`
 	return fetch(url, requestOptions)
 	.then((response) => response.json())
-	.then((data) => {
-		console.log(data)
+	.then((res) => {
+		console.log(res)
+		const data = res.data
+		// err = res.err
 		// setVeriResult(data)
 		setTime(data.time)
-		setAcc(data.acc)
+		setDis(data.distance)
 		return data
 	})
 	.catch ((error) => console.error(error));
@@ -49,6 +52,7 @@ const identifiedImage = (data) => {
 		method: 'POST',
 		headers: { 
 			'Content-Type': 'application/json',
+			"Access-Control-Allow-Origin": "*",
 		},
 		body: JSON.stringify(data)
 	};
@@ -58,9 +62,10 @@ const identifiedImage = (data) => {
 	const url = `http://127.0.0.1:8080/api/identification/${model}?offset=${topNumber}`
 	return fetch(url, requestOptions)
 	.then((response) => response.json())
-	.then((data) => {
+	.then((res) => {
+		const data = res.data
 		console.log(data)
-		setListImage(data.result)
+		setListImage(data.list_image)
 		setTime(data.time)
 	})
 	.catch ((error) => console.error(error));
@@ -96,7 +101,7 @@ return (
 		<h4 className='output-text'>Output</h4>
 		{(typeTest===FaceID) && <Output itemData={listImage} time={time}></Output>}
 		{(typeTest===FaceVeri) && <div>
-			<h1> Acc: {acc}</h1>
+			<h1> Distance: {dis}</h1>
 			<h1>Time: {time}</h1>
 		</div>}
 	</div>

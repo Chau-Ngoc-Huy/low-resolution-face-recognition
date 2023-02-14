@@ -59,11 +59,15 @@ def find(img_request, gallery_info, top):
     dis = pairwise_distances(img_request, features_gallery, metric='cosine')
     
     ind_max = np.argsort(dis, axis=1)[0, :int(top)]
-    list_path_top = []
+    result = []
     for ind in ind_max:
-        list_path_top.append(path_gallery[ind])
+        top_img = {
+            'img': path_gallery[ind],
+            'dis': str(dis[0][ind])
+        }
+        result.append(top_img)
     
-    return list_path_top
+    return result
 
 def identification(img_url, model, trans, model_name, top):
     
@@ -99,4 +103,9 @@ def identification(img_url, model, trans, model_name, top):
     
     time_inference = datetime.datetime.now() - time_start
 
-    return result, list_path_top
+    data = {
+        'list_image': list_path_top,
+        'time': str(time_inference.total_seconds())
+    }
+
+    return data, 0

@@ -37,11 +37,10 @@ def verified(model_id):
             model_use = model_EIPNet
             trans = trans_EIPNet
 
-        req, acc, time = verification(request.get_json()['image1'], request.get_json()['image2'], model_use, trans, model)
+        data, err = verification(request.get_json()['image1'], request.get_json()['image2'], model_use, trans, model)
         res = jsonify({
-            'req': req,
-            'acc': acc,
-            'time': time
+            'data': data,
+            'err': err
         })
         return res
     else:
@@ -62,11 +61,11 @@ def identified(model_id):
             model_use = model_EIPNet
             trans = trans_EIPNet
 
-        result, time = identification(request.get_json()['image1'], model_use, trans, model, offset)
+        data, err = identification(request.get_json()['image1'], model_use, trans, model, offset)
 
         res = jsonify({
-            'result': result,
-            'time': time
+            'data': data,
+            'err': err
         })
         return res
     else:

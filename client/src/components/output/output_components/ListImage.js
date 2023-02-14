@@ -9,16 +9,16 @@ function ListImage({itemData}) {
             <div className="output-component">
                 <div>
                 <ImageList  cols={5} rowHeight={164}>
-                    {itemData.map((item) => (
-                        <ImageListItem key={item.img}>
+                    {itemData.map((item, id) => (
+                        <ImageListItem key={id}>
                             <img
                                 src={`${item.img}?w=248&fit=crop&auto=format`}
                                 srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                alt={item.title}
+                                // alt={item.title}
                                 loading="lazy"
                             />
                             <ImageListItemBar
-                                title={item.title}
+                                title={item.dis}
                                 position="below"
                             />
                         </ImageListItem>

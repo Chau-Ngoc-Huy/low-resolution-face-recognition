@@ -1,3 +1,7 @@
+create-env:
+	python -m venv env
+start-env:
+	env\Scripts\activate
 install:
 	pip install -r requirements.txt
 	# instal torch==1.4.0+cpu
@@ -7,5 +11,6 @@ install:
 
 download:
 	# download pretrained TCN 
-	gdown https://drive.google.com/u/1/uc?id=1ZGaHazJYlc00pS0CzrcrQfS07km6yZ6X&export=download
+	gdown https://drive.google.com/u/1/uc?id=1ZGaHazJYlc00pS0CzrcrQfS07km6yZ6X&export=download  
+	move ./TCN_InceptionV1.pt ./app/pretrained/TCN_InceptionV1.pt
 	

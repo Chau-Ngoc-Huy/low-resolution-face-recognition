@@ -70,5 +70,10 @@ def verification(img1, img2, model, trans, model_name):
         pair = 0 
     
     time_inference = datetime.datetime.now() - time_start
+
+    data = {
+        'distance': str(dist),
+        'time': str(time_inference.total_seconds())
+    }
     
-    return req, str(dist), 1
+    return data, 0
