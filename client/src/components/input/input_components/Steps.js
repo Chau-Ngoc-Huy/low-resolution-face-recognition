@@ -33,7 +33,7 @@ export default function InputSlider({ value, setValue }) {
     return (
         <div className='steps-container'>
             <Box>
-                <label className='steps-label label'>Number of output</label>
+                <label className='model-label label'>Number of output</label>
                 <Grid container spacing={2} alignItems="center">
                     <Grid item>
                         <Input

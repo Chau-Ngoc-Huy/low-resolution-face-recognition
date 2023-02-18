@@ -1,7 +1,7 @@
 .model-container {
-    margin: 24px 0;
-    flex-direction: column;
-
+    // flex-direction: column;
+    float: left;
+    margin-right: 24px;
     .model-select {
         display: block;
         border-radius: 0.375rem;

@@ -5,6 +5,7 @@ import Model from './input_components/Model'
 import TypeTest from './input_components/TypeTest'
 import UploadImg from './input_components/UploadImg'
 import InputSlider from './input_components/Steps'
+import ShowWebCam from './input_components/ShowWebCam'
 
 
 function Input({onSubmit}) {
@@ -31,16 +32,22 @@ function Input({onSubmit}) {
 
   return (
     <div>
-      <Model setModel={(value) => setModel(value)}></Model>
-      <TypeTest onSetTypeTest={handleSetType}></TypeTest>
-      {!isFV && <InputSlider value={topNumber} setValue={(value) => setTopNumber(value)}></InputSlider>}
+      <div className='setting'>
+        <Model setModel={(value) => setModel(value)}></Model>
+        <TypeTest onSetTypeTest={handleSetType}></TypeTest>
+        {!isFV && <InputSlider value={topNumber} setValue={(value) => setTopNumber(value)}></InputSlider>}
+      </div>
+      
+      
         {isFV && 
           <div className='double-dropzone'>
-            <UploadImg className='uploadImg' setImg={handleSetImg1}  labelName='Image1'></UploadImg>
-            <UploadImg className='uploadImg' setImg={handleSetImg2} labelName='Image2'></UploadImg>
+            <UploadImg setImg={handleSetImg1}  labelName='Image1'type='single-upload-image' ></UploadImg>
+            <UploadImg setImg={handleSetImg2} labelName='Image2' type='single-upload-image' ></UploadImg>
           </div>
         }
-      {!isFV && <UploadImg setImg={handleSetImg1} labelName='Image1'></UploadImg>}
+      {!isFV && <div className='image-input-container'>
+        <UploadImg type='single-upload-image' setImg={handleSetImg1} labelName='Image1'></UploadImg>
+      </div>}
       <button className='submit-button' onClick={handleOnClick}>Submit</button>
     </div >
   )
