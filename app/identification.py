@@ -5,6 +5,7 @@ import base64
 from PIL import Image 
 import io 
 import datetime
+import os 
 
 import numpy as np
 from sklearn.preprocessing import normalize
@@ -45,6 +46,9 @@ listImage = [
     },
 ]
 
+PATH_IMAGES = ''
+PATH_FEATURES = './app/features'
+
 def find(img_request, gallery_info, top):
 
     features_gallery = []
@@ -53,7 +57,7 @@ def find(img_request, gallery_info, top):
     for feature in gallery_info:
         features_gallery.append(feature[0])
         labels_gallery.append(feature[1])
-        path_gallery.append(feature[2])
+        path_gallery.append(os.path.join(PATH_IMAGES, os.path.basename(feature[2])))
 
     features_gallery = np.array(features_gallery)
     dis = pairwise_distances(img_request, features_gallery, metric='cosine')
@@ -93,10 +97,10 @@ def identification(img_url, model, trans, model_name, top):
     if model_name == 'TCN':
         print(img.shape)
         out_net, _ = model(img.to(device))
-        gallery_info = np.load('./app/features/features_gallery_TCN.npy', allow_pickle=True)
+        gallery_info = np.load(os.path.join(PATH_FEATURES, 'features_gallery_TCN.npy'), allow_pickle=True)
     else:
         out_net = model_extract(img.to(device))
-        gallery_info = np.load('./app/features/features_gallery_sr_EIPNet.npy', allow_pickle=True)
+        gallery_info = np.load(os.path.join(PATH_FEATURES, 'features_gallery_sr_EIPNet.npy'), allow_pickle=True)
 
     out_net = out_net.cpu().detach().numpy()
     list_path_top = find(out_net, gallery_info, top)
