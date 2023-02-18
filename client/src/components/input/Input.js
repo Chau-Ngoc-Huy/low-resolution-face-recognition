@@ -5,6 +5,7 @@ import Model from './input_components/Model'
 import TypeTest from './input_components/TypeTest'
 import UploadImg from './input_components/UploadImg'
 import InputSlider from './input_components/Steps'
+import ShowWebCam from './input_components/ShowWebCam'
 
 
 function Input({onSubmit}) {
@@ -40,11 +41,13 @@ function Input({onSubmit}) {
       
         {isFV && 
           <div className='double-dropzone'>
-            <UploadImg setImg={handleSetImg1}  labelName='Image1' type="double-upload-image"></UploadImg>
-            <UploadImg setImg={handleSetImg2} labelName='Image2' type="double-upload-image"></UploadImg>
+            <UploadImg setImg={handleSetImg1}  labelName='Image1'type='single-upload-image' ></UploadImg>
+            <UploadImg setImg={handleSetImg2} labelName='Image2' type='single-upload-image' ></UploadImg>
           </div>
         }
-      {!isFV && <UploadImg type='single-upload-image' setImg={handleSetImg1} labelName='Image1'></UploadImg>}
+      {!isFV && <div className='image-input-container'>
+        <UploadImg type='single-upload-image' setImg={handleSetImg1} labelName='Image1'></UploadImg>
+      </div>}
       <button className='submit-button' onClick={handleOnClick}>Submit</button>
     </div >
   )

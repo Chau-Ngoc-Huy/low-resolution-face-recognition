@@ -37,14 +37,25 @@
 }
 
 .show-img {
-    display: table;
+    width: 1000px;
+}
+
+.float-left {
+    float: left;
+}
+// .input-image {
+//     // float: left;
+// }
+
+.preview-image {
+    width: 1000px;
 }
 
 .crop-controls {
     width: 500px;
     padding: 0 8px;
 
-    // float: left;
+    float: left;
     margin-top: 20px;
 }
 .double-dropzone {
@@ -56,11 +67,17 @@
 .double-upload-image {
     float: left;
 }
-
+.input-image {
+    display: table;
+}
 .single-upload-image {
+    float: left;
     .crop-controls{
-        width: 1000px;
+        width: 400px;
     }
+}
+.image-input-container{
+    display: table;
 }
 .dropzone-container {
     flex: 1;
@@ -135,7 +152,7 @@
 .webcam {
     // max-width: 100%;
     flex: 1;
-    padding: 20px;
+    // padding: 20px;
     border-width: 2px;
     border-radius: 2px;
     border-color: #eeeeee;
@@ -185,14 +202,19 @@
 
 .modal-container {
     float: left;
-    // display: flex;
-    width: 200px;
-    gap: 30px;
-    margin: 0 8px;
+    // position: "relative"
+    // display: table;
+    width: 600px;
+    // gap: 30px;
+    // margin: 20px 8px;
+}
+
+.table {
+    display: table;
 }
 
 .draw-mask {
-    width: 200px;
+    // width: 200px;
     padding: 0 8px;
     float: left;
 }

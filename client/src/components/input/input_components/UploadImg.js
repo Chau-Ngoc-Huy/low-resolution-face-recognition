@@ -7,6 +7,7 @@ import ReactCrop, {
 } from 'react-image-crop'
 
 import { CanvasPreview } from './CanvasPreview'
+import ShowWebCam from './ShowWebCam';
 // import Resize from './Resize';
 
 
@@ -34,6 +35,7 @@ function UploadImg({setImg, labelName, type='upload-image'}) {
     const [fileName, setFileName] = useState("")
     const [crop, setCrop] = useState({})
     const [completedCrop, setCompletedCrop] = useState({})
+	const [isCompletedCrop, setIsCompletedCrop] = useState(false)
     const [scale, setScale] = useState(1)
 	// const [isDrawing, setIsDrawing] = useState(false)
     const [rotate, setRotate] = useState(0)
@@ -42,7 +44,7 @@ function UploadImg({setImg, labelName, type='upload-image'}) {
     const imgRef = useRef(null);
     const previewCanvasRef = useRef(null)
     const aspect = 1 / 1
-	const size = 200
+	const size = 384
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -87,6 +89,7 @@ function UploadImg({setImg, labelName, type='upload-image'}) {
 					scale,
 					rotate,
 				)
+				// console.log(completedCrop)
 				// console.log(previewCanvasRef.current.toDataURL())
 				setImg(previewCanvasRef.current.toDataURL())
 			}
@@ -101,72 +104,88 @@ function UploadImg({setImg, labelName, type='upload-image'}) {
         setFileName("")
         setFiles([])
         setImg(null)
+		setIsCompletedCrop(false)
         const canvas = previewCanvasRef.current
         const ctx = canvas.getContext('2d')
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     useEffect(() => {
-        const canvas = drawCanvasRef.current
-        canvas.width = size;
-        canvas.height = size;
-    
-        const context = canvas.getContext("2d")
-        context.scale(1, 1);
-        context.lineCap = "round";
-        context.strokeStyle = "black";
-        context.lineWidth = 5;
-        contextRef.current = context;
-      }, []);
+		if (drawCanvasRef.current !== null) {
+			const canvas = drawCanvasRef.current
+			canvas.width = size;
+			canvas.height = size;
+		
+			const context = canvas.getContext("2d")
+			context.scale(1, 1);
+			context.lineCap = "round";
+			context.strokeStyle = "black";
+			context.lineWidth = 5;
+			contextRef.current = context;
+		}
+        
+      }, [drawCanvasRef]);
 
     return (
         <div className={type}>
-            <div className="crop-controls">
-				<label className='label-dropzone label'>{labelName}</label>
-				<div className='drop-file'>
-					<div className='dropzone-container'>
-						<div {...getRootProps()} className="dropzone">
-							<input {...getInputProps()} />
-							<span><i className="fa-sharp fa-solid fa-upload"></i></span>
-							<p>Drop a file or click to select</p>
-							<p>{ }</p>
+			<div className='input-image table'>
+				<ShowWebCam setImgSrc={setImgSrc} imgSrc={imgSrc} setFileName={setFileName} files={files}></ShowWebCam>
+				<div className="crop-controls float-left">
+					<label className='label-dropzone label'>{labelName}</label>
+					<div className='drop-file'>
+						<div className='dropzone-container'>
+							<div {...getRootProps()} className="dropzone">
+								<input {...getInputProps()} />
+								<span><i className="fa-sharp fa-solid fa-upload"></i></span>
+								<p>Drop a file or click to select</p>
+								<p>{ }</p>
+							</div>
+							{!!fileName && <div className='filename-container'>
+								<p>{fileName}</p>
+								<i className="fa-solid fa-trash" onClick={handleRemoveFile}></i>
+							</div>}
 						</div>
-						{!!fileName && <div className='filename-container'>
-							<p>{fileName}</p>
-							<i className="fa-solid fa-trash" onClick={handleRemoveFile}></i>
-						</div>}
 					</div>
 				</div>
-        	</div>
-
+				
+				
+			</div>
+            
 			<div className='show-img'>
-				{!!imgSrc && <>
-					<div className='modal-container'>
-					<label className='label-mask label'>Origin</label>
-						{
-						<ReactCrop
-							crop={crop}
-							onChange={(_, percentCrop) => setCrop(percentCrop)}
-							onComplete={(c) => setCompletedCrop(c)}
-							aspect={aspect}
-						>
-							
-							<img
-								ref={imgRef}
-								alt="Crop me"
-								src={imgSrc}
-								style={{ 
-									transform: `scale(${scale}) rotate(${rotate}deg)`,
-									minWidth: '200px',
-									// maxHeight: '600px',
-									
+				
+				<div className='preview-image table'>
+					{!!imgSrc && <>
+						<div className='modal-container'>
+						<label className='label-mask label'>Origin</label>
+							{
+							<ReactCrop
+								style={{ display:'block', width: 'fit-content'}}
+								crop={crop}
+								onChange={(_, percentCrop) => setCrop(percentCrop)}
+								onComplete={(c) => {
+									setCompletedCrop(c)
+									setIsCompletedCrop(true)
 								}}
-								onLoad={onImageLoad}
-							/>
-						</ReactCrop>}
-					</div>
-				</>}
-
-				{!!completedCrop && (
+								aspect={aspect}
+							>
+								
+								{imgSrc &&<img
+									ref={imgRef}
+									alt="Crop me"
+									src={imgSrc}
+									style={{ 
+										transform: `scale(${scale}) rotate(${rotate}deg)`,
+										maxHeight: size,
+										minHeight: '300px',
+										maxWidth: '600px',
+										// maxHeight: '600px',
+										
+									}}
+									onLoad={onImageLoad}
+								/>}
+							</ReactCrop>}
+						</div>
+					</>}
+					{isCompletedCrop && (
 					<div className='draw-mask'>
 						<label className='label-mask label'>Preview</label>
 						<div style={{ position: "relative" }}>
@@ -190,9 +209,11 @@ function UploadImg({setImg, labelName, type='upload-image'}) {
 							></canvas>
 						</div>
 					</div>
-				)}
-				{!!imgSrc && <div>
-						<label className='edit-label label'>edit</label>
+					
+					)}
+				
+					{/* {!!imgSrc && <div>
+					<label className='edit-label label'>edit</label>
 						<div className='modal'>
 							<div className='settings-image'>
 								<div className='zoom-container'>
@@ -219,7 +240,9 @@ function UploadImg({setImg, labelName, type='upload-image'}) {
 								</div>
 							</div>
 						</div>
-					</div> }
+					</div> } */}
+				</div>
+				
 			</div>
 			
             

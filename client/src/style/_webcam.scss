@@ -1,0 +1,24 @@
+.webcam {
+    width: 600px;
+    flex: 1;
+    padding: 20px;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: #666161;
+    border-style: dashed;
+    background-color: #fafafa;
+    color: #bdbdbd;
+    outline: none;
+    transition: border .24s ease-in-out;
+    margin-bottom: 12px;
+    height: 100px;
+}
+.live-cam {
+    width: 600px;
+}
+.webcam-container {
+    margin-top: 20px;
+    // width: 200px;
+    // background-color: aqua;
+    // float: left;
+}
