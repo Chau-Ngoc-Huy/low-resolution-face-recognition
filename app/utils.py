@@ -1,6 +1,6 @@
 import sys
 sys.path.insert(0, './app/EIPnet')
-
+sys.path.insert(1, './app')
 import torch
 from facenet_pytorch import InceptionResnetV1
 import torchvision.transforms as T

@@ -18,7 +18,7 @@ features/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
-
+test.py
 # misc
 .DS_Store
 .env.local
@@ -31,3 +31,4 @@ yarn-debug.log*
 yarn-error.log*
 env
 TCN_InceptionV1.pt
+Gallery_Match/

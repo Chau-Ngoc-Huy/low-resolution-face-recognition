@@ -46,7 +46,7 @@ listImage = [
     },
 ]
 
-PATH_IMAGES = ''
+PATH_IMAGES = './app/Gallery_Match'
 PATH_FEATURES = './app/features'
 
 def find(img_request, gallery_info, top):
