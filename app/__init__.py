@@ -36,7 +36,6 @@ def images():
 
 @app.route('/images/<path:path>')
 def serve_image(path):
-    print("image list")
     return send_from_directory('gallery/', path)
 
 @app.route('/api/verification/<model_id>', methods=['POST'])
