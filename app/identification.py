@@ -47,11 +47,7 @@ listImage = [
     },
 ]
 
-<<<<<<< HEAD
 PATH_IMAGES = 'http://localhost:8080/images/'
-=======
-PATH_IMAGES = './app/Gallery_Match'
->>>>>>> d67ec3239501fd86b099c9a0bdf26f2b69a616c4
 PATH_FEATURES = './app/features'
 
 def find(img_request, gallery_info, top):
@@ -86,7 +82,6 @@ def identification(img_url, model, trans, model_name, top):
     result = listImage
     time_start = datetime.datetime.now()
 
-    print(img_url)
     img_bytes = base64.b64decode(img_url.split(',')[1])
     img = Image.open(io.BytesIO(img_bytes)).convert('RGB')
 
