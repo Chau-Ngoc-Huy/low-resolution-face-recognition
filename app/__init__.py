@@ -1,9 +1,10 @@
 # from asyncio.constants import ACCEPT_RETRY_DELAY
 from unittest import result
-from flask import Flask, send_file, jsonify, request
+from flask import Flask, send_file, jsonify, request, send_from_directory
 from app.identification import identification
 from app.verificaiton import verification
 from flask_cors import CORS
+import os
 
 from app.utils import load_model_EIPNet, load_model_TCN
 
@@ -24,6 +25,19 @@ model_EIPNet, trans_EIPNet = load_model_EIPNet()
 @app.route('/')
 def index():
     return send_file('build/index.html')
+
+@app.route('/images')
+def images():
+    images_list = []
+    for file in os.listdir('app/gallery/'):
+        if file.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+            images_list.append('/images/' + file)
+    return jsonify(images=images_list)
+
+@app.route('/images/<path:path>')
+def serve_image(path):
+    print("image list")
+    return send_from_directory('gallery/', path)
 
 @app.route('/api/verification/<model_id>', methods=['POST'])
 def verified(model_id):
@@ -61,7 +75,10 @@ def identified(model_id):
             model_use = model_EIPNet
             trans = trans_EIPNet
 
-        data, err = identification(request.get_json()['image1'], model_use, trans, model, offset)
+        if request.get_json()['image1'] != None:
+            data, err = identification(request.get_json()['image1'], model_use, trans, model, offset)
+        else:
+            return jsonify({'message': 'bad request'}), 400
 
         res = jsonify({
             'data': data,

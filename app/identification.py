@@ -11,6 +11,7 @@ import numpy as np
 from sklearn.preprocessing import normalize
 from sklearn.metrics import pairwise_distances
 
+
 listImage = [
     {
         "img": 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
@@ -46,7 +47,7 @@ listImage = [
     },
 ]
 
-PATH_IMAGES = ''
+PATH_IMAGES = 'http://localhost:8080/images/'
 PATH_FEATURES = './app/features'
 
 def find(img_request, gallery_info, top):
@@ -57,7 +58,7 @@ def find(img_request, gallery_info, top):
     for feature in gallery_info:
         features_gallery.append(feature[0])
         labels_gallery.append(feature[1])
-        path_gallery.append(os.path.join(PATH_IMAGES, os.path.basename(feature[2])))
+        path_gallery.append(PATH_IMAGES + os.path.basename(feature[2]))
 
     features_gallery = np.array(features_gallery)
     dis = pairwise_distances(img_request, features_gallery, metric='cosine')
@@ -81,6 +82,7 @@ def identification(img_url, model, trans, model_name, top):
     result = listImage
     time_start = datetime.datetime.now()
 
+    print(img_url)
     img_bytes = base64.b64decode(img_url.split(',')[1])
     img = Image.open(io.BytesIO(img_bytes)).convert('RGB')
 
