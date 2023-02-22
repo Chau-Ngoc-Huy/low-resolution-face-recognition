@@ -1,11 +1,11 @@
 import React from "react";
-import MarkedImage from "./pages/MarkedImage";
+import FaceRecognition from "./pages/FaceRecognition";
 import "./style/main.scss"
 
 function App() {
   return (
     <div className="App">
-      <MarkedImage></MarkedImage>
+      <FaceRecognition></FaceRecognition>
     </div>
   );
 }

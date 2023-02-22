@@ -33,8 +33,8 @@ function Input({onSubmit}) {
   return (
     <div>
       <div className='setting'>
-        <Model setModel={(value) => setModel(value)}></Model>
         <TypeTest onSetTypeTest={handleSetType}></TypeTest>
+        <Model setModel={(value) => setModel(value)}></Model>
         {!isFV && <InputSlider value={topNumber} setValue={(value) => setTopNumber(value)}></InputSlider>}
       </div>
       

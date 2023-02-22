@@ -6,19 +6,19 @@ import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material'
 function ListImage({itemData}) {
     return (
         <>
-            <div className="output-component">
+            <div className="list-image">
                 <div>
-                <ImageList  cols={5} rowHeight={164}>
+                <ImageList  cols={3}>
                     {itemData.map((item, id) => (
                         <ImageListItem key={id}>
                             <img
                                 src={`${item.img}?w=248&fit=crop&auto=format`}
                                 srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                // alt={item.title}
+                                alt={item.dis}
                                 loading="lazy"
                             />
                             <ImageListItemBar
-                                title={item.dis}
+                                title={"Top " + (id+1)}
                                 position="below"
                             />
                         </ImageListItem>

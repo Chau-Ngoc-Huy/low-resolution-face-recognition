@@ -7,7 +7,7 @@ import Header from '../components/Header'
 // import Model from '../components/Model';
 
 
-function MarkedImage() {
+function FaceRecognition() {
 
 const FaceID = "FaceID"
 const FaceVeri = "FaceVeri"
@@ -65,8 +65,11 @@ const identifiedImage = (data) => {
 	.then((res) => {
 		const data = res.data
 		console.log(data)
-		setListImage(data.list_image)
-		setTime(data.time)
+		if (data !== undefined) {
+			setListImage(data.list_image)
+			setTime(data.time)
+		}
+		
 	})
 	.catch ((error) => console.error(error));
 }
@@ -89,24 +92,28 @@ const handleSubmit = useCallback((image1, image2, model, typeTest, topNumber) =>
 	// console.log(data);
 }, [])
 return (
-	<div className='marked-image-app'>
-	<div className='header-container'>
-		<Header></Header>
-	</div>
-	<div className='input-container'>
-		<h4 className='input-text'>Input</h4>
-		<Input onSubmit={handleSubmit}></Input>
-	</div>
-	<div className='output-container'>
-		<h4 className='output-text'>Output</h4>
-		{(typeTest===FaceID) && <Output itemData={listImage} time={time}></Output>}
-		{(typeTest===FaceVeri) && <div>
-			<h1> Distance: {dis}</h1>
-			<h1>Time: {time}</h1>
-		</div>}
-	</div>
+	<div className='face-recognition-app'>
+		<div className='header-container'>
+			<Header></Header>
+		</div>
+		<div className='container'>
+			<div className='input-container'>
+				<h4 className='input-text'>Input</h4>
+				<Input onSubmit={handleSubmit}></Input>
+			</div>
+			<div className='output-container'>
+				<h4 className='output-text'>Output</h4>
+				<div className='output-component'>
+					{(typeTest===FaceID) && <Output itemData={listImage} time={time}></Output>}
+					{(typeTest===FaceVeri) && <div>
+						<label className='result-text'> Distance: {dis}</label>
+						<label className='result-text'>Time: {time}</label>
+					</div>}
+				</div>
+			</div>
+		</div>
 	</div>
 )
 }
 
-export default MarkedImage;
+export default FaceRecognition;

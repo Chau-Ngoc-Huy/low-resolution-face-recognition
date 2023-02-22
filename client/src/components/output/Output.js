@@ -9,7 +9,7 @@ function Output({itemData, time}) {
         <>
             <div className="output-component">
                 <div>
-                    <h1>Time: {time}</h1>
+                    <label className="result-text">Time: {time + 's'}</label>
                     <ListImage itemData={itemData}></ListImage>
                 </div>
             </div>

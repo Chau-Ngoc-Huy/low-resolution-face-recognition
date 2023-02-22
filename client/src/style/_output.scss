@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     gap: 36px 0;
+    border: 1px solid black;
+    background-color: azure;
 
     .output-img {
         margin-top: 12px;
@@ -22,4 +24,13 @@
         background-color: transparent;
         cursor: pointer;
     }
+}
+
+.list-image {
+    margin: 20px;
+}
+.result-text {
+    margin: 20px;
+    font-size: 20px;
+    font-weight: bold;
 }

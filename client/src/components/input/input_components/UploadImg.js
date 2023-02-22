@@ -155,7 +155,7 @@ function UploadImg({setImg, labelName, type='upload-image'}) {
 				<div className='preview-image table'>
 					{!!imgSrc && <>
 						<div className='modal-container'>
-						<label className='label-mask label'>Origin</label>
+						{/* <label className='label-mask label'>Origin</label> */}
 							{
 							<ReactCrop
 								style={{ display:'block', width: 'fit-content'}}
@@ -187,7 +187,7 @@ function UploadImg({setImg, labelName, type='upload-image'}) {
 					</>}
 					{isCompletedCrop && (
 					<div className='draw-mask'>
-						<label className='label-mask label'>Preview</label>
+						{/* <label className='label-mask label'>Preview</label> */}
 						<div style={{ position: "relative" }}>
 							<canvas
 								id='canvas'
