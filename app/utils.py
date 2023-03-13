@@ -1,13 +1,13 @@
 import sys
-sys.path.insert(0, './app/EIPnet')
-sys.path.insert(1, './app')
+sys.path.append('./app/EIPnet')
+sys.path.append('./app')
 import torch
 from facenet_pytorch import InceptionResnetV1
 import torchvision.transforms as T
 
 import tensorflow as tf
-from networks import generator
-from options.test_options import TestOptions
+from EIPNet.networks import generator
+from EIPNet.options.test_options import TestOptions
 
 import base64
 from PIL import Image 

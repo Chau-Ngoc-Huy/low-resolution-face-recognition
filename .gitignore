@@ -32,3 +32,4 @@ yarn-error.log*
 env
 TCN_InceptionV1.pt
 gallery/
+Gallery_Match/
