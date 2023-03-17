@@ -15,6 +15,7 @@ const FaceVeri = "FaceVeri"
 const [typeTest, setTypeTest] = useState(FaceID)
 const [time, setTime] = useState(0)
 const [dis, setDis] = useState(0)
+const [veriResult, setVeriResult] = useState('')
 const [listImage, setListImage] = useState([])
 // const [veriResult, setVeriResult] = useState({})
 // const [idResult, setIdResult] = useState([])
@@ -42,6 +43,7 @@ const verifiedImage = (data) => {
 		// setVeriResult(data)
 		setTime(data.time)
 		setDis(data.distance)
+		setVeriResult(data.result)
 		return data
 	})
 	.catch ((error) => console.error(error));
@@ -105,8 +107,9 @@ return (
 				<h4 className='output-text'>Output</h4>
 				<div className='output-component'>
 					{(typeTest===FaceID) && <Output itemData={listImage} time={time}></Output>}
-					{(typeTest===FaceVeri) && <div>
-						<label className='result-text'> Distance: {dis}</label>
+					{(typeTest===FaceVeri) && <div className='table'>
+						<label className='result-text'>Result: {veriResult}</label>
+						<label className='result-text'>Distance: {dis}</label>
 						<label className='result-text'>Time: {time}</label>
 					</div>}
 				</div>

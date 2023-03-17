@@ -65,14 +65,15 @@ def verification(img1, img2, model, trans, model_name):
     dist = np.sum(np.square(diff))
     print('Distance between embeddings: ', dist)
     if dist < 0.5: 
-        pair = 1
+        pair = 'true'
     else:
-        pair = 0 
+        pair = 'false'
     
     time_inference = datetime.datetime.now() - time_start
 
     data = {
         'distance': str(dist),
+        'result': pair,
         'time': str(time_inference.total_seconds())
     }
     
